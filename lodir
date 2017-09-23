@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+
+create_dir(){
+    dir_en_full="${dir_en}.localized"
+    mkdir -p ${dir_en_full}/.localized
+    cd ${dir_en_full}/.localized
+    lo_str="\"$dir_en\" = \"$dir_lo\";"
+    echo ${lo_str} >> zh_CN.strings
+}
+
+change_alias(){
+    cd .localized
+    rm zh_CN.strings
+    lo_str="\"$dir_en\" = \"$dir_lo\";"
+    echo ${lo_str} >> zh_CN.strings
+}
+
+echo_result(){
+    echo "SUCCESSFULLY create a folder $dir_lo"
+    echo "the path is `dirname $PWD`"
+}
+
+if [ $# -gt 2 ] ; then 
+echo "check lodir -h" 
+exit 1; 
+fi 
+
+if [ $# = 2 ] ; then
+dir_en=${1}
+dir_lo=${2}
+create_dir
+echo_result
+fi
+
+if [ $# = 1 ] ; then 
+dir_lo=${1}
+dir_en=`echo ${PWD##*/} | sed 's/.localized//g'`
+change_alias
+echo_result
+fi
